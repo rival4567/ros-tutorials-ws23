@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<robot name="bowling_ball" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+    <xacro:include filename="$(find pkg_task1)/urdf/bowling_ball_bot.gazebo" />
+
+    <!-- Constants for robot -->
+    <xacro:property name="radius" value="0.2"/>
+    <xacro:property name="mass" value="8.0"/>
+
+    <material name="gloss_black">
+        <color rgba="${37/255} ${35/255} ${36/255} 1"/>
+    </material>
+
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <sphere radius="0.2"/>
+            </geometry>
+            <material name="gloss_black"/>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </visual>
+        <collision>
+            <geometry>
+                <sphere radius="0.2"/>
+            </geometry>
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </collision> 
+        <inertial>
+            <mass value="8.0" />
+            <inertia ixx="0.03872" ixy="0.004" ixz="0.005" iyy="0.03872" iyz="0.003" izz="0.03872" />
+        </inertial>
+    </link>
+
+    <link name="dummy">
+        <inertial>
+            <mass value="1e-04" />
+            <inertia ixx="1e-06" ixy="0" ixz="0" iyy="1e-06" iyz="0" izz="1e-06" />
+        </inertial>
+    </link>     
+
+    <link name="rotx_link">
+        <inertial>
+            <mass value="1e-04" />
+            <inertia ixx="1e-06" ixy="0" ixz="0" iyy="1e-06" iyz="0" izz="1e-06" />
+        </inertial>
+    </link>
+
+    <link name="roty_link">
+        <inertial>
+            <mass value="1e-04" />
+            <inertia ixx="1e-06" ixy="0" ixz="0" iyy="1e-06" iyz="0" izz="1e-06" />
+        </inertial>
+    </link>
+
+    <link name="rotz_link">
+        <inertial>
+            <mass value="1e-04" />
+            <inertia ixx="1e-06" ixy="0" ixz="0" iyy="1e-06" iyz="0" izz="1e-06" />
+        </inertial>
+    </link>
+
+    <joint name="rotate_x" type="continuous">
+        <parent link="base_link"/>
+        <child link="rotx_link"/>
+        <axis xyz="1 0 0"/>
+    </joint>
+    <joint name="rotate_y" type="continuous">
+        <parent link="rotx_link"/>
+        <child link="roty_link"/>
+        <axis xyz="0 1 0"/>
+    </joint>
+    <joint name="rotate_z" type="continuous">
+        <parent link="roty_link"/>
+        <child link="rotz_link"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+    <joint name="fix" type="fixed">
+        <parent link="rotz_link"/>
+        <child link="dummy"/>
+    </joint>
+    
+
+    <!-- This block provides movement of ball bot -->
+    <transmission name="move_x">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="move_x">
+            <mechanicalReduction>1</mechanicalReduction>
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </actuator>
+        <joint name="rotate_x">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+    </transmission>
+
+    <transmission name="move_y">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="move_y">
+            <mechanicalReduction>1</mechanicalReduction>
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </actuator>
+        <joint name="rotate_y">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+    </transmission>
+
+    <transmission name="move_z">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="move_z">
+            <mechanicalReduction>1</mechanicalReduction>
+            <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </actuator>
+        <joint name="rotate_z">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+    </transmission>
+</robot>
