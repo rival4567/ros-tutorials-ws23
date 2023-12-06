@@ -29,6 +29,8 @@
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
         args="-x 0 -y 0 -z 0.5 -unpause -urdf -model robot -param robot_description" respawn="false" output="screen" />
   
+  <node name="node_bowling_pin_cam" pkg="pkg_task1" type="node_bowling_pin_cam.py"/>
+
   <!-- Recording Bag File for Submission -->
   <arg name="record" default="false"/>
   <arg name="rec_name" default="bowling.bag"/>
